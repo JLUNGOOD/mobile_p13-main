@@ -9,52 +9,49 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
   Future<Position>? position;
 
-  String myPosition = ''; 
+  String myPosition = '';
   @override
-  void initState(){
+  void initState() {
     super.initState();
     position = getPosition();
-    getPosition().then((Position myPos){
-      myPosition = 
-        'Latitude: ${myPos.latitude.toString()} - longitude: {myPos.longitude.toString()}';
-        setState(() {
-          myPosition = myPosition;
-        });
+    getPosition().then((Position myPos) {
+      myPosition =
+          'Latitude: ${myPos.latitude.toString()} - longitude: {myPos.longitude.toString()}';
+      setState(() {
+        myPosition = myPosition;
+      });
     });
   }
-  @override 
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Rizky Angkata')),
-      body: Center(child: FutureBuilder(
-        future: position,
-        builder: (BuildContext context, AsyncSnapshot<Position>
-        snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          }
-          else if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError){
-              return Text('Something terrible happened!');
-            }
-            return Text(snapshot.data.toString());
-          }
-          else {
-            return const Text('');
-          }
-        }
-      )),
+      appBar: AppBar(title: const Text('Alwan Alawi')),
+      body: Center(
+          child: FutureBuilder(
+              future: position,
+              builder:
+                  (BuildContext context, AsyncSnapshot<Position> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Text('Something terrible happened!');
+                  }
+                  return Text(snapshot.data.toString());
+                } else {
+                  return const Text('');
+                }
+              })),
     );
   }
 
   Future<Position> getPosition() async {
     await Future.delayed(const Duration(seconds: 3));
     await Geolocator.isLocationServiceEnabled();
-    Position position = await Geolocator. getCurrentPosition();
+    Position position = await Geolocator.getCurrentPosition();
     return position;
   }
-
 }

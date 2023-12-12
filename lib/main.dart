@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobile_p13/navigation_dialog.dart';
-import 'package:mobile_p13/navigation_first.dart';
+import 'package:mobile_p13/geolocation.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -13,32 +12,43 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  
+  get myPosition => null;
 
   // This widget is the root of your application.
   @override
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Alwan Alawi',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      // home: const FuturePage(),
-      // home: LocationScreen(),
-      // home: const NavigationFirst(),
-      home: const NavigationDialogScreen()
+    final myWidget = myPosition == ''
+        ? const CircularProgressIndicator()
+        : const Text(myPosition);
+
+    return Scaffold(
+      appBar: AppBar(title: Text('Current Location')),
+      body: Center(child: myWidget),
     );
   }
 }
 
-class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key});
-
-  @override
-  State<LocationScreen> createState() => _LocationScreenState();
+Future<Response> getData() async{
+  const authority = 'www.googleapis.com';
+  const path = '/books/v1/volumes/junbDwAAQBAJ';
+  Uri url = Uri.https(authority, path);
+  return http.get(url);
 }
 
-class _LocationScreenState extends State<LocationScreen> {
+
+
+class FuturePage extends StatefulWidget {
+  const FuturePage({super.key});
+
+  @override
+  State<FuturePage> createState() => _FuturePageState();
+}
+
+class _FuturePageState extends State<FuturePage> {
+
+  late Completer completer;
 
   Future handleError() async{
     try {
@@ -60,81 +70,77 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void returnFG(){
-    // FutureGroup<int> futureGroup = FutureGroup<int>();
-    // futureGroup.add(returnOneAsync());
-    // futureGroup.add(returnTwoAsync());
-    // futureGroup.add(returnThreeAsync());
-    // futureGroup.close();
-    // futureGroup.future.then((List <int> value){
-    //   int total = 0;
-    //   for (var element in value){
-    //     total += element;
-    //   }
-    //   setState(() {
-    //     result = total.toString();
-    //   });
-    // });
-
+    FutureGroup<int> futureGroup = FutureGroup <int>();
+    futureGroup.add(returnOneAsync());
+    futureGroup.add(returnTwoAsync());
+    futureGroup.add(returnThreeAsync());
+    futureGroup.close();
+    futureGroup.future.then((List <int> value){
+      int total = 0;
+      for (var element  in value){
+        total += element;
+      }
+        setState(() {
+          result = total.toString();
+        });
+    });
     final futures = Future.wait<int>([
-    returnOneAsync(),
-    returnTwoAsync(),
-    returnThreeAsync(),
-]);
+      returnOneAsync(),
+      returnTwoAsync(),
+      returnThreeAsync(),
+    ]);
   }
 
-  late Completer completer;
+  Future getNumber() {
+    completer = Completer<int>();
+    calculate2();
+    return completer.future;
+  }
 
-Future getNumber() {
-  completer = Completer<int>();
-  calculate();
-  return completer.future;
-}
-
-calculate() async {
-  try {
-    await new Future.delayed(const Duration(seconds: 5));
+  Future calculate() async {
+    await Future.delayed(const Duration(seconds: 5));
     completer.complete(42);
-}
-  catch (_){
-    completer.completeError({});
   }
-}
+
+  calculate2() async {
+    try {
+      await new Future.delayed(const Duration(seconds: 5));
+      completer.complete(42);
+    } catch (_) {
+      completer.completeError({});
+    }
+  }
 
   Future<int> returnOneAsync() async {
-  await Future.delayed(const Duration(seconds: 3));
-  return 1;
-}
-
-Future<int> returnTwoAsync() async {
-  await Future.delayed(const Duration(seconds: 3));
-  return 2;
-}
-
-Future<int> returnThreeAsync() async {
-  await Future.delayed(const Duration(seconds: 3));
-  return 3;
-}
-
-Future count() async {
-  int total = 0;
-  total = await returnOneAsync();
-  total += await returnTwoAsync();
-  total += await returnThreeAsync();
-  setState(() {
-    result = total.toString();
-  });
-}
-
-  Future<Response> getData() async{
-    const authority = 'www.googleapis.com';
-    const path = '/books/v1/volumes/junbDwAAQBAJ';
-    Uri url = Uri.https(authority, path);
-    return http.get(url);
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
   }
 
-  String result = '';
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
+  Future count() async {
+    int total = 0;
+    total = await returnOneAsync();
+    total += await returnTwoAsync();
+    total += await returnThreeAsync();
+    setState(() {
+      result = total.toString();
+    });
+  }
+
+  
+  
+  String result=' ';
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
         title: const Text('Back from the Future'),
@@ -145,17 +151,28 @@ Future count() async {
           ElevatedButton(
             child: const Text('GO!'),
             onPressed: () {
+              // setState(() {});
+              // getData()
+              // .then((value) {
+              //   result = value.body.toString().substring(0, 450);
+              //   setState(() { });
+              // }).catchError((_){
+              //   result = 'An error occurred';
+              //   setState(() { });
+              // });
               // count();
-              // getNumber().then((value){
+              // getNumber().then((value) {
               //   setState(() {
               //     result = value.toString();
               //   });
-              // }).catchError((e){
+              // });
+              // getNumber().then((value) {
+              //   setState(() {
+              //     result = value.toString();
+              //   });
+              // }).catchError((e) {
               //   result = 'An error occurred';
               // });
-
-              // returnFG();
-
               returnError()
                 .then((value){
                   setState(() {
@@ -166,8 +183,6 @@ Future count() async {
                     result = onError.toString();
                   });
                 }).whenComplete(() => print('Complete'));
-
-              
             },
           ),
           const Spacer(),
@@ -176,8 +191,7 @@ Future count() async {
           const CircularProgressIndicator(),
           const Spacer(),
         ]),
-      ),
+      )
     );
   }
-  
 }
