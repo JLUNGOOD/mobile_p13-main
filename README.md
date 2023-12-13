@@ -755,3 +755,166 @@ Lakukan edit properti home.
 ```
 home: const NavigationFirst(),
 ```
+### Langkah 8: Run
+
+Lakukan run, jika terjadi error silakan diperbaiki.
+
+**Soal 16**
+
+*Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?*
+
+- JAWAB : Saat button diklik maka akan backround akan ikut berubah mengikuti warna yang telah dipilih
+
+- Gantilah 3 warna pada langkah 5 dengan warna favorit Anda!
+
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W12: Soal 16".
+
+Hasil :
+
+![image](https://github.com/JLUNGOOD/mobile_p13-main/assets/106043734/c4607257-b7f3-4d71-ac00-3e883f394341)
+
+![image](https://github.com/JLUNGOOD/mobile_p13-main/assets/106043734/a50f6327-5479-47f0-bd09-2421c43494b4)
+
+# PRAKTIKUM 9
+
+### Langkah 1: Buat file baru navigation_dialog.dart
+
+Buat file dart baru di folder lib project Anda.
+
+### Langkah 2: Isi kode navigation_dialog.dart
+```
+import 'package:flutter/material.dart';
+
+class NavigationDialogScreen extends StatefulWidget {
+  const NavigationDialogScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NavigationDialogScreen> createState() => _NavigationDialogScreenState();
+}
+
+class _NavigationDialogScreenState extends State<NavigationDialogScreen> {
+  Color color = Colors.blue.shade700;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(
+        title: const Text('Navigation Dialog Screen'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () {
+            _showColorDialog(context);
+          },
+        ),
+      ),
+    );
+  }
+```
+
+### Langkah 3: Tambah method async
+```
+_showColorDialog(BuildContext context) async {
+    Color selectedColor = await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text('Very important question'),
+          content: const Text('Please choose a color'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Red'),
+              onPressed: () {
+                Navigator.pop(context, Colors.red.shade700);
+              },
+            ),
+            TextButton(
+              child: const Text('Green'),
+              onPressed: () {
+                Navigator.pop(context, Colors.green.shade700);
+              },
+            ),
+            TextButton(
+              child: const Text('Blue'),
+              onPressed: () {
+                Navigator.pop(context, Colors.blue.shade700);
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+    // Set the selected color using setState
+    setState(() {
+      color = selectedColor;
+    });
+  }
+}
+```
+
+### Langkah 4: Panggil method di ElevatedButton
+```
+onPressed: () {
+  _showColorDialog(context);
+}),
+```
+### Langkah 5: Edit main.dart
+Ubah properti home
+```
+home : const NavigationDialog(),
+```
+### Langkah 6: Run
+
+Coba ganti warna background dengan widget dialog tersebut. Jika terjadi error, silakan diperbaiki. Jika berhasil, akan tampil seperti gambar berikut.
+
+Hasil :
+
+![image](https://github.com/JLUNGOOD/mobile_p13-main/assets/106043734/68c6e25e-6a21-4fad-bb05-29d5bdf65355)
+
+**Soal 17**
+
+*Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?*
+
+JAWAB :
+
+- Saat button diklik maka akan backround akan ikut berubah mengikuti warna yang telah dipilih
+
+- Gantilah 3 warna pada langkah 3 dengan warna favorit Anda!
+
+JAWAB :
+```
+return AlertDialog(
+        title: const Text('Very important question'),
+        content: const Text('Please choose a color'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Red'),
+            onPressed: () {
+              Navigator.pop(context, Colors.orange.shade700);
+            },
+          ),
+          TextButton(
+            child: const Text('Green'),
+            onPressed: () {
+              Navigator.pop(context, Colors.pink.shade700);
+            },
+          ),
+          TextButton(
+            child: const Text('Blue'),
+            onPressed: () {
+              Navigator.pop(context, Colors.grey.shade700);
+            },
+          ),
+        ],
+      );
+```
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W12: Soal 17".
+
+Hasil :
+
+![image](https://github.com/JLUNGOOD/mobile_p13-main/assets/106043734/6de6cf75-f325-4ea5-8b41-5eccfc8702fe)
+
