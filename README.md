@@ -570,7 +570,7 @@ Tambah method ini dan set variabel position
 ```
 
 ### Langkah 4: Edit method build()
-
+```
 Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
 
 @override 
@@ -597,42 +597,161 @@ Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
       )),
     );
   }
-Soal 13
+```
+**Soal 13**
 
-Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+*Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?*
 
 JAWAB :
 
 Ada, karena menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
 
-Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W12: Soal 13".
+- Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W12: Soal 13".
 
-Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
+- Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
 
 Hasil :
 
-image
+![image](https://github.com/JLUNGOOD/mobile_p13-main/assets/106043734/1ffcfe75-1f36-4264-b804-59392fccfd6a)
 
-Langkah 5: Tambah handling error
 
+### Langkah 5: Tambah handling error
 Tambahkan kode berikut untuk menangani ketika terjadi error. Kemudian hot restart.
-
+```
 else if (snapshot.connectionState == ConnectionState.done) {
   if (snapshot.hasError) {
      return Text('Something terrible happened!');
   }
   return Text(snapshot.data.toString());
 }
-Soal 14
+```
 
-Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+**Soal 14**
+
+*Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?*
 
 JAWAB :
 
-Ada
+`Ada
 
-Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W12: Soal 14".
+`Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "W12: Soal 14".
 
 Hasil :
 
-image
+![image](https://github.com/JLUNGOOD/mobile_p13-main/assets/106043734/48d608d1-6a4f-41cb-acef-e2e9483ecbab)
+
+# Praktikum 8: Navigation route dengan Future Function
+### Langkah 1: Buat file baru navigation_first.dart
+Buatlah file baru ini di project lib Anda.
+
+### Langkah 2: Isi kode navigation_first.dart
+```
+import 'package:flutter/material.dart';
+
+class NavigationFirst extends StatefulWidget {
+  const NavigationFirst({Key? key}) : super(key: key);
+
+  @override
+  State<NavigationFirst> createState() => _NavigationFirstState();
+}
+
+class _NavigationFirstState extends State<NavigationFirst> {
+  Color color = Colors.blue.shade700;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: color,
+      appBar: AppBar(
+        title: const Text('Rizky Angkata'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: const Text('Change Color'),
+          onPressed: () async {
+             _navigateAndGetColor(context);
+
+            // Update the color if a new color is selected
+            if (resultColor != null) {
+              setState(() {
+                color = resultColor;
+              });
+            }
+          },
+        ),
+      ),
+    );
+  }
+```
+
+**Soal 15**
+- *Tambahkan nama panggilan Anda pada tiap properti title sebagai identitas pekerjaan Anda.*
+- *Silakan ganti dengan warna tema favorit Anda.*
+
+### Langkah 3: Tambah method di class _NavigationFirstState
+Tambahkan method ini.
+```
+Future _navigateAndGetColor(BuildContext context) async {
+   color = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const NavigationSecond()),) ?? Colors.blue;
+   setState(() {});
+   });
+}
+```
+### Langkah 4: Buat file baru navigation_second.dart
+Buat file baru ini di project lib Anda. Silakan jika ingin mengelompokkan view menjadi satu folder dan sesuaikan impor yang dibutuhkan.
+
+### Langkah 5: Buat class NavigationSecond dengan StatefulWidget
+```
+import 'package:flutter/material.dart';
+
+class NavigationSecond extends StatefulWidget {
+  const NavigationSecond({Key? key}) : super(key: key);
+  @override 
+  State<NavigationSecond> createState() => _NavigationSecondState();
+}
+
+class _NavigationSecondState extends State<NavigationSecond> {
+  @override
+  Widget build(BuildContext context) {
+    Color color;
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Rizky Angkata'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              child: const Text('Merah'),
+              onPressed: () {
+                color = Colors.red.shade700;
+                Navigator.pop(context, color);
+              }),
+             ElevatedButton(
+              child: const Text('Abu-abu'),
+              onPressed: () {
+                color = Colors.grey.shade700;
+                Navigator.pop(context, color);
+              }),
+            ElevatedButton(
+              child: const Text('Kuning'),
+              onPressed: () {
+                color = Colors.yellow.shade700;
+                Navigator.pop(context, color);
+              }),
+          ],
+        )
+      )
+    );
+  }
+}
+```
+
+### Langkah 6: Edit main.dart
+
+Lakukan edit properti home.
+```
+home: const NavigationFirst(),
+```
